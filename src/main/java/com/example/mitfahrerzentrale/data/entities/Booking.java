@@ -3,6 +3,8 @@ package com.example.mitfahrerzentrale.data.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -14,7 +16,6 @@ import java.time.Instant;
 @Table(name = "bookings", schema = "mitfahrerzentrale")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BookingId", nullable = false)
     private Integer id;
 
@@ -35,7 +36,11 @@ public class Booking {
     @Column(name = "BookingStatus")
     private String bookingStatus;
 
+    @Column(name = "IsActive", nullable = false)
+    private Boolean isActive = false;
+
     @Column(name = "BookedAt", nullable = false)
+    @CreationTimestamp
     private Instant bookedAt;
 
 }

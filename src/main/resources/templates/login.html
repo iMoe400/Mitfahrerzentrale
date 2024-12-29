@@ -14,9 +14,6 @@
     </script>
 </div>
 
-<!-- Navbar laden -->
-<div th:replace="~{fragments/navbar :: navbar}"></div>
-
 <!-- Login-Formular, etwas höher positioniert -->
 <div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">
     <div class="col-md-4">
@@ -40,7 +37,7 @@
                 You have been logged out.
             </div>
         </form>
-        <p class="text-center mt-3">No account? <a th:href="@{/register/decision}">Register here</a></p>
+        <p class="text-center mt-3">No account? <a th:href="@{/register}">Register here</a></p>
     </div>
 </div>
 

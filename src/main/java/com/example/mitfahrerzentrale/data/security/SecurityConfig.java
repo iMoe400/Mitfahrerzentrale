@@ -1,6 +1,5 @@
 package com.example.mitfahrerzentrale.data.security;
 
-import com.example.demo4.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

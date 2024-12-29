@@ -8,6 +8,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,7 +17,6 @@ import java.time.Instant;
 @Table(name = "rides", schema = "mitfahrerzentrale")
 public class Ride {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RideId", nullable = false)
     private Integer id;
 
@@ -40,16 +41,29 @@ public class Ride {
     @Column(name = "DestinationLocation", nullable = false)
     private String destinationLocation;
 
-    @Column(name = "Coordinates", length = 100)
-    private String coordinates;
+    @Column(name = "DestinationCoordinates")
+    private BigDecimal destinationCoordinates;
 
-    @Column(name = "DepartureTime", nullable = false)
+    @Column(name = "DepartureCoordinates")
+    private BigDecimal departureCoordinates;
+
+    @Column(name = "DepartureTime")
     private Instant departureTime;
 
     @Column(name = "Radius")
     private Integer radius;
 
+    @Column(name = "IsActive", nullable = false)
+    private Boolean isActive = false;
+
     @Column(name = "CreatedAt", nullable = false)
     private Instant createdAt;
+
+    @Column(name = "ArrivalTime")
+    private Instant arrivalTime;
+
+
+    @OneToMany(mappedBy = "ride")
+    private Set<Booking> bookings = new LinkedHashSet<>();
 
 }

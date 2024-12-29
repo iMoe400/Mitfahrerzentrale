@@ -3,14 +3,12 @@ package com.example.mitfahrerzentrale.data.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "users", schema = "mitfahrerzentrale")
 public class User {
@@ -35,12 +33,96 @@ public class User {
     @Column(name = "Role")
     private String role;
 
-    @ColumnDefault("1")
     @Column(name = "IsActive", nullable = false)
     private Boolean isActive = false;
 
-    @CreationTimestamp
     @Column(name = "CreatedAt", nullable = false)
     private Instant createdAt;
 
+    @OneToMany(mappedBy = "passenger")
+    private Set<Booking> bookings = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "driver")
+    private Set<Ride> rides = new LinkedHashSet<>();
+
+    public Set<Ride> getRides() {
+        return rides;
+    }
+
+    public void setRides(Set<Ride> rides) {
+        this.rides = rides;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean active) {
+        isActive = active;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
