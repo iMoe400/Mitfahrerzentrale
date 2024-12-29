@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class LoginController {
 
     @GetMapping("/login")
-    public String login(@ModelAttribute("username") String username, @ModelAttribute("password") String password, @ModelAttribute("error") String error, Model model) {
+    public String login(@ModelAttribute("username") String username, @ModelAttribute("password") String password, @ModelAttribute("error") String error, Model model ) {
         if (error != null) {
             model.addAttribute("error", error);
         }
-        model.addAttribute("username", username);
-        model.addAttribute("password", password);
+        if(!username.isEmpty() && !password.isEmpty()) {
+            model.addAttribute("username", username);
+            model.addAttribute("password", password);
+        }
         return "login";
     }
 }
