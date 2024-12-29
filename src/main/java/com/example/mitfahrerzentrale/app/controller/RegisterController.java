@@ -27,6 +27,7 @@ public class RegisterController {
                                       @RequestParam(value = "email", required = false) String email,
                                       @RequestParam(value = "phone_number", required = false) String phoneNumber,
                                       @RequestParam(value = "password", required = false) String password, RedirectAttributes redirectAttributes) {
+
         try {
             User user = new User();
 
@@ -44,7 +45,6 @@ public class RegisterController {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-
         return "redirect:/login";
     }
 

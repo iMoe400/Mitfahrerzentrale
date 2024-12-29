@@ -1,8 +1,11 @@
 package com.example.mitfahrerzentrale.app.controller;
 
-import com.example.mitfahrerzentrale.data.entities.User;
+import com.example.mitfahrerzentrale.app.services.UserService;
+import com.example.mitfahrerzentrale.data.dtos.UserDTO;
 import com.example.mitfahrerzentrale.data.repos.UserRepo;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +28,8 @@ public class HomeController {
     @GetMapping("/home")
     public String home(Authentication authentication, RedirectAttributes redirectAttributes, Model model) {
 
-        User user = userRepo.findUserByName(authentication.getName());
-
-        if (!authentication.isAuthenticated()) {
-            redirectAttributes.addFlashAttribute("error", "You are not logged in");
-            return "redirect:/login";
-        }
+        UserDTO userDTO = UserService.userToDTO(userRepo.findUserByName(authentication.getName()));
+        model.addAttribute("user", userDTO);
         return "home";
     }
 
