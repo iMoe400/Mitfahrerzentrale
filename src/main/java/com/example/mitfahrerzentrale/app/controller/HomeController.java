@@ -16,11 +16,12 @@ import java.util.Optional;
 
 @Controller
 public class HomeController {
+//Startseite Inhalt:
+    //th:if="${fahrten}" -> div für die fahrten über suchleiste und ergebnissen
+    //ansonsnten einfach nur suchleiste und ergebnisse, ggf vorläufige ergebnisse wenn Standort aktiviert
+    //User nach Standort bei Anmeldung fragen?
+    //User einem Wohnort zuordnen?
 
-
-    public HomeController() {
-
-    }
 
     @GetMapping("/home")
     public String home(Authentication authentication, RedirectAttributes redirectAttributes, Model model) {

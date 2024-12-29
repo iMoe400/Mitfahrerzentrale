@@ -1,5 +1,7 @@
 package com.example.mitfahrerzentrale.app.controller;
 
+import com.example.mitfahrerzentrale.data.dtos.UserDTO;
+import com.example.mitfahrerzentrale.data.entities.User;
 import com.example.mitfahrerzentrale.data.repos.BookingRepo;
 import com.example.mitfahrerzentrale.data.repos.RideRepo;
 import com.example.mitfahrerzentrale.data.repos.UserRepo;
@@ -19,19 +21,36 @@ import java.time.LocalDate;
 @Controller
 public class RegisterController {
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepo userRepo;
 
     @PostMapping("/register/create")
-    public String confirmRegisterForm(Model model, @RequestParam(value = "companyName", required = false) String companyName, @RequestParam(value = "usernamePrakti", required = false) String usernamePrakti, @RequestParam(value = "passwordPrakti", required = false) String passwordPrakti, @RequestParam(value = "emailPrakti", required = false) String emailPrakti, @RequestParam(value = "usernameUnternehmi", required = false) String usernameUnternehmi, @RequestParam(value = "passwordUnternehmi", required = false) String passwordUnternehmi, @RequestParam(value = "emailUnternehmi", required = false) String emailUnternehmi, @RequestParam(value = "descriptionUnternehmi", required = false) String description, @RequestParam(value = "lookingForIntern", required = false) String lookingForIntern, @RequestParam(value = "firstName", required = false) String firstName, @RequestParam(value = "lastName", required = false) String lastName, @RequestParam("birthday") LocalDate birthday, @RequestParam(value = "lookingForCompany", required = false) String lookingForCompany, @RequestParam(value = "decisionPrakti") Boolean decisionPrakti, @RequestParam(value = "decisionUnternehmi") Boolean decisionUnternehmi, RedirectAttributes redirectAttributes) {
+    public String confirmRegisterForm(Model model, @RequestParam(value = "username", required = false) String username,
+                                      @RequestParam(value = "email", required = false) String email,
+                                      @RequestParam(value = "phone_number", required = false) String phoneNumber,
+                                      @RequestParam(value = "password", required = false) String password, RedirectAttributes redirectAttributes) {
 
+        User user = new User();
 
+        String hashedPassword = passwordEncoder.encode(password);
 
+        user.setEmail(email);
+        user.setName(username);
+        user.setPhoneNumber(phoneNumber);
+        user.setPasswordHash(hashedPassword);
+        user.setIsActive(true);
+        user.setRole("USER");
+        userRepo.saveAndFlush(user);
+        redirectAttributes.addAttribute("username", username);
+        redirectAttributes.addAttribute("password", password);
         return "redirect:/login";
     }
 
-    @PostMapping("/register")
-    public String showRegisterForm() {
 
+    @GetMapping("/register")
+    public String showRegisterForm() {
         return "register";
     }
 }
