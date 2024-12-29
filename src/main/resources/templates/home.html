@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div th:if="${error != null && !error.isEmpty()}">
+    <script th:inline="javascript">
+        const errorMessage = /*[[${error}]]*/ 'Ein unbekannter Fehler ist aufgetreten';
+        alert("Ein Fehler ist aufgetreten: " + errorMessage);
+    </script>
+</div>
+<!-- Navbar laden -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Container für das Dashboard -->
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Willkommen auf deinem Dashboard!</h1>
+
+    <!-- Profilinfos und weitere Inhalte in Bootstrap-Rows -->
+    <div class="row">
+        <!-- Linke Spalte (Profilbild und Grundinfos) -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="https://via.placeholder.com/150" class="img-fluid rounded-circle mb-3" alt="Profilbild">
+                    <h5 class="card-title" th:text="${info.getFirstName()}"></h5>
+                    <p class="card-text" th:text="${info.getLastName()}"></p>
+                    <p class="card-text" th:text="${info.getProfileDescription()}"></p>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Rechte Spalte (weitere Infos) -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Profilinformationen</h5>
+                    <p class="card-text">Hier kannst du detaillierte Profilinformationen anzeigen oder bearbeiten.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:text="${user.getEmail()}"><strong>E-Mail:</strong></li>
+                        <li class="list-group-item" th:text="${user.getCreatedAt()}"><strong>Erstellt am:</strong></li>
+                        <li class="list-group-item" th:text="${user.getIsActive()}"><strong>Ist Aktiv:</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weitere Abschnitte und Inhalte für das Dashboard können hier eingefügt werden -->
+    <div class="row mt-5">
+        <div class="col">
+            <h4>Deine Aktivitäten</h4>
+            <p>Hier könntest du Statistiken oder eine Übersicht der letzten Aktivitäten hinzufügen.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFY2HlWDj/9LMzGJ6dO60r5aJ5I1tXkzY7rENQQ9P7k5G5aJc7/t2Gy04p" crossorigin="anonymous"></script>
+</body>
+</html>
