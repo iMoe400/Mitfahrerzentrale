@@ -1,0 +1,168 @@
+.navbar {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background-color: #112D4E;
+    width: 100%;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px; ;
+    margin-bottom: 32px;
+}
+
+.navbar-header {
+    margin: 0 20px 0 20px;
+}
+
+.navbar-options {
+    margin: 0;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+}
+.navbar-options li {
+    margin: 0 20px 0 20px;
+}
+.navbar-options li a {
+    color: white;
+}
+
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+}
+
+.page-content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: scroll;
+}
+
+.search-bar {
+    width: 80vw;
+    background-color: #DBE2EF;
+    border: 1px #DBE2EF solid;
+    border-radius: 25px; display: flex;
+    flex-direction: row;
+    justify-content: center
+}
+
+
+.booked-rides-container {
+    width: 100%;
+}
+
+.booked-rides-container-caption{
+    width: 100%;
+    margin-top: 32px;
+}
+
+.caption-booked-ride {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #DBE2EF;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #F9F7F7;
+}
+
+.card-part {
+    width: 15%;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 80vh;
+}
+
+
+.CancelButton {
+
+}
+
+.OkButton {
+
+}
+
+.ride-inputs {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.input-label {
+    width: 100%;
+    margin: 0 0 12px 0;
+}
+
+.inputs{
+    width: 100%;
+    height: 4vh;
+    border-radius: 8px;
+    border: 1px #f1f1f1 solid;
+    background-color: #f1f1f1;
+    font-size: 16px;
+}
+
+.NeutralButton {
+ align-items: center;
+ background-clip: padding-box;
+ background-color: #3F72AF;
+ border: 1px solid transparent;
+ border-radius: .25rem;
+ box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+ box-sizing: border-box;
+ color: #fff;
+ cursor: pointer;
+ display: inline-flex;
+ font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+ font-size: 16px;
+ font-weight: 600;
+ justify-content: center;
+ line-height: 1.25;
+ margin: 0;
+ min-height: 3rem;
+ padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+ position: relative;
+ text-decoration: none;
+ transition: all 250ms;
+ user-select: none;
+ -webkit-user-select: none;
+ touch-action: manipulation;
+ vertical-align: baseline;
+}
+
+.NeutralButton:hover,
+.NeutralButton:focus {
+    background-color: #4e7cb3;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.NeutralButton:hover {
+    transform: translateY(-1px);
+}
+
+.NeutralButton:active {
+    background-color: #204f87;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+    transform: translateY(0);
+}
+

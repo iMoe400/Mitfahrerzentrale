@@ -1,8 +1,14 @@
 package com.example.mitfahrerzentrale.data.dtos;
 
+import jakarta.persistence.SequenceGenerator;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Getter
+@Setter
 public class RIdeDTO {
 
     private Integer id;
