@@ -1,6 +1,5 @@
 package com.example.mitfahrerzentrale.data.dtos;
 
-import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,27 +8,23 @@ import java.time.Instant;
 
 @Getter
 @Setter
-public class RIdeDTO {
+public class RideDTO {
 
     private Integer id;
-
-    private UserDTO driver;
-
+    private Integer driverId;
     private Integer maxPassengers;
-
+    private Integer passengerCount;
     private BigDecimal price;
-
     private String status;
-
-    private String departureLocation;
-
+    private String startLocation;
     private String destinationLocation;
-
-    private String coordinates;
-
-    private Instant departureTime;
-
     private Integer radius;
-
+    private Boolean isActive;
     private Instant createdAt;
+    private Instant arrivalTime;
+    private Instant startTime;
+    private Double destLatCoordinates;
+    private Double startLatCoordinates;
+    private Double startLonCoordinates;
+    private Double destLonCoordinates;
 }

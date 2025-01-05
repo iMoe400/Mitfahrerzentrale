@@ -3,6 +3,7 @@ package com.example.mitfahrerzentrale.data.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,7 +17,9 @@ import java.util.Set;
 @Entity
 @Table(name = "rides", schema = "mitfahrerzentrale")
 public class Ride {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-Inkrement in der Datenbank
     @Column(name = "RideId", nullable = false)
     private Integer id;
 
@@ -35,20 +38,11 @@ public class Ride {
     @Column(name = "Status")
     private String status;
 
-    @Column(name = "DepartureLocation", nullable = false)
-    private String departureLocation;
+    @Column(name = "StartLocation", nullable = false)
+    private String startLocation;
 
     @Column(name = "DestinationLocation", nullable = false)
     private String destinationLocation;
-
-    @Column(name = "DestinationCoordinates")
-    private BigDecimal destinationCoordinates;
-
-    @Column(name = "DepartureCoordinates")
-    private BigDecimal departureCoordinates;
-
-    @Column(name = "DepartureTime")
-    private Instant departureTime;
 
     @Column(name = "Radius")
     private Integer radius;
@@ -57,13 +51,28 @@ public class Ride {
     private Boolean isActive = false;
 
     @Column(name = "CreatedAt", nullable = false)
+    @CreationTimestamp
     private Instant createdAt;
 
     @Column(name = "ArrivalTime")
     private Instant arrivalTime;
 
+    @Column(name = "DestLatCoordinates")
+    private Double destLatCoordinates;
 
-    @OneToMany(mappedBy = "ride")
-    private Set<Booking> bookings = new LinkedHashSet<>();
+    @Column(name = "StartLatCoordinates")
+    private Double startLatCoordinates;
+
+    @Column(name = "StartLonCoordinates")
+    private Double startLonCoordinates;
+
+    @Column(name = "DestLonCoordinates")
+    private Double destLonCoordinates;
+
+    @Column(name = "StartTime")
+    private Instant startTime;
+
+    @Column(name = "PassengerCount")
+    private Integer passengerCount;
 
 }

@@ -16,6 +16,7 @@ import java.time.Instant;
 @Table(name = "bookings", schema = "mitfahrerzentrale")
 public class Booking {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BookingId", nullable = false)
     private Integer id;
 
@@ -37,7 +38,7 @@ public class Booking {
     private String bookingStatus;
 
     @Column(name = "IsActive", nullable = false)
-    private Boolean isActive = false;
+    private Boolean isActive = true;
 
     @Column(name = "BookedAt", nullable = false)
     @CreationTimestamp
