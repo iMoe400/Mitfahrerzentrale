@@ -51,7 +51,7 @@ public class DtoWrapper {
     public static BookingDTO bookingToDTO(Booking booking) {
         BookingDTO bookingDTO = new BookingDTO();
         bookingDTO.setId(booking.getId());
-        bookingDTO.setRideId(booking.getRide().getId());
+        bookingDTO.setRide(rideToDTO(booking.getRide()));
         bookingDTO.setPassengerId(booking.getPassenger().getId());
         bookingDTO.setPassengerCount(booking.getPassengerCount());
         bookingDTO.setBookingStatus(booking.getBookingStatus());

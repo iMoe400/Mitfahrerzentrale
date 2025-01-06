@@ -89,6 +89,34 @@
                             <td style="padding: 10px; border: 1px solid #ccc;" th:text="${ride.getDestinationLocation()}">Hamburg</td>
                             <td style="padding: 10px; border: 1px solid #ccc;" th:text="${ride.getStartTime()}">2025-01-03 14:00</td>
                             <td style="padding: 10px; border: 1px solid #ccc;" th:text="${ride.getStatus()}">Active</td>
+                            <td>
+                                <form th:action="@{/create-booking}" method="post">
+                                    <input type="hidden" name="rideId" th:value="${ride.getId()}">
+                                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                                    <button type="submit">Buchen</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <table style="width: 90%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                        <tr style="background-color: #f4f4f4;">
+                            <th style="padding: 10px; border: 1px solid #ccc;">Price</th>
+                            <th style="padding: 10px; border: 1px solid #ccc;">Departure Location</th>
+                            <th style="padding: 10px; border: 1px solid #ccc;">Destination Location</th>
+                            <th style="padding: 10px; border: 1px solid #ccc;">Departure Time</th>
+                            <th style="padding: 10px; border: 1px solid #ccc;">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Example Row -->
+                        <tr th:each="booking : ${bookings}" style="background-color: #ffffff;">
+                            <td style="padding: 10px; border: 1px solid #ccc;" th:text="${booking.ride.getPrice()}">$20</td>
+                            <td style="padding: 10px; border: 1px solid #ccc;" th:text="${booking.ride.getStartLocation()}">Berlin</td>
+                            <td style="padding: 10px; border: 1px solid #ccc;" th:text="${booking.ride.getDestinationLocation()}">Hamburg</td>
+                            <td style="padding: 10px; border: 1px solid #ccc;" th:text="${booking.ride.getPassengerCount()}">2025-01-03 14:00</td>
                         </tr>
                         </tbody>
                     </table>

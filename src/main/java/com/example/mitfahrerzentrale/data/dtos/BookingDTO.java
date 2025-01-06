@@ -10,7 +10,7 @@ import java.time.Instant;
 @Setter
 public class BookingDTO {
     private Integer id;
-    private Integer rideId; // Referenz auf die Ride-ID
+    private RideDTO ride; // Referenz auf die Ride-ID
     private Integer passengerId; // Referenz auf die Passenger-ID
     private Integer passengerCount;
     private String bookingStatus;

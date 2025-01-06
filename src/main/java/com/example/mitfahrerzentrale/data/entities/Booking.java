@@ -33,7 +33,7 @@ public class Booking {
     @Column(name = "PassengerCount", nullable = false)
     private Integer passengerCount;
 
-    @Lob
+
     @Column(name = "BookingStatus")
     private String bookingStatus;
 

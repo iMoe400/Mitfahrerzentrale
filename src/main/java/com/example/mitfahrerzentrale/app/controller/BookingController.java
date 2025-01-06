@@ -36,12 +36,17 @@ public class BookingController {
                     Booking booking = new Booking();
                     booking.setRide(rideRepo.findRideById(rideId).get());
                     booking.setPassenger(userRepo.findUserByName(authentication.getName()));
-                    booking.setPassengerCount(ride.getPassengerCount());
-                    booking.setBookingStatus("AKTIV");
+                    if(ride.getPassengerCount()!= null){
+                        booking.setPassengerCount(ride.getPassengerCount()+1);
+                        ride.setPassengerCount(ride.getPassengerCount() + 1);
+                    } else {
+                        booking.setPassengerCount(1);
+                        ride.setPassengerCount(1);
+                    }
                     booking.setIsActive(true);
                     bookingRepo.save(booking);
 
-                    ride.setPassengerCount(ride.getPassengerCount() + 1);
+
                     rideRepo.save(ride);
 
                 } catch (Exception e) {
@@ -56,4 +61,9 @@ public class BookingController {
 
         return "redirect:/home";
     }
+
+
+
+
+
 }
