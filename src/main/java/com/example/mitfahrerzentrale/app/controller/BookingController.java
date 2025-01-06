@@ -8,7 +8,6 @@ import com.example.mitfahrerzentrale.data.repos.UserRepo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -62,6 +61,21 @@ public class BookingController {
         return "redirect:/home";
     }
 
+
+    @PostMapping("/delete-booking")
+    public String deleteBooking(Authentication authentication, @RequestParam Integer bookingId, @RequestParam Integer rideId, Model model) {
+        Booking booking = bookingRepo.findBookingById(bookingId).get();
+        Ride ride = rideRepo.findRideById(rideId).get();
+
+        bookingRepo.delete(booking);
+        if(ride.getPassengerCount()!= null){
+            ride.setPassengerCount(ride.getPassengerCount() - 1);
+        }else {
+            throw new RuntimeException("Wenn dieser Fehler passiert ist die Physik des Universums unlogisch");
+        }
+
+        return "redirect:/home";
+    }
 
 
 
