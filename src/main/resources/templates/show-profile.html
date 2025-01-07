@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/profile-styles.css}">
+
+</head>
+<body>
+<div class="profile-container">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+        <div class="profile-card">
+            <div class="profile-row">
+                <span class="profile-label">Name:</span>
+                <span class="profile-value" th:text="${user.name}"></span>
+            </div>
+            <div class="profile-row">
+                <span class="profile-label">Email:</span>
+                <span class="profile-value" th:text="${user.email}"></span>
+            </div>
+            <div class="profile-row">
+                <span class="profile-label">Phone Number:</span>
+                <span class="profile-value" th:text="${user.phoneNumber}"></span>
+            </div>
+            <div class="profile-row">
+                <span class="profile-label">Password:</span>
+                <span class="profile-value">XXXXXXX</span>
+            </div>
+        </div>
+        <!-- Edit Profile Form -->
+        <form th:action="@{/edit-profile}" th:method="get" class="edit-button-container">
+            <button class="edit-button" type="submit">Edit Profile</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

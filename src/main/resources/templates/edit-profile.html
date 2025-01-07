@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil bearbeiten</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/profile-styles.css}">
+</head>
+<body>
+<div class="profile-container">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+        <form th:action="@{/profile/edit}" th:method="post" class="profile-edit-form">
+            <!-- Name -->
+            <div class="profile-row">
+                <label class="profile-label" for="name">Name:</label>
+                <input class="profile-input" type="text" id="name" name="name" th:value="${user.name}" required>
+            </div>
+            <!-- Email -->
+            <div class="profile-row">
+                <label class="profile-label" for="email">Email:</label>
+                <input class="profile-input" type="email" id="email" name="email" th:value="${user.email}" required>
+            </div>
+            <!-- Phone Number -->
+            <div class="profile-row">
+                <label class="profile-label" for="phoneNumber">Phone Number:</label>
+                <input class="profile-input" type="tel" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}">
+            </div>
+            <!-- Password -->
+            <div class="profile-row">
+                <label class="profile-label" for="password">New Password:</label>
+                <input class="profile-input" type="password" id="password" name="password">
+            </div>
+            <!-- Confirm Password -->
+            <div class="profile-row">
+                <label class="profile-label" for="confirmPassword">Confirm Password:</label>
+                <input class="profile-input" type="password" id="confirmPassword" name="confirmPassword">
+            </div>
+            <!-- Submit Button -->
+            <div class="profile-row">
+                <button class="edit-button" type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

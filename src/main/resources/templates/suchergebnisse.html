@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suchergebnisse</title>
+</head>
+<body>
+<h1>Suchergebnisse</h1>
+
+<ul>
+    <li th:each="result : ${searchResults}">
+        <form th:action="@{/home}" method="get">
+            <p>
+                <strong th:text="${result.displayName ?: 'Kein Name verfügbar'}">Ortsname</strong><br>
+                Hausnummer: <span th:text="${result.address?.houseNumber ?: 'Keine Hausnummer verfügbar'}"></span><br>
+                Straße: <span th:text="${result.address?.road ?: 'Keine Straße verfügbar'}"></span><br>
+                Stadt: <span th:text="${result.address?.getCityOrTown() ?: 'Keine Stadt verfügbar'}"></span><br>
+            </p>
+
+            <!-- Verstecktes Feld mit kombiniertem Daten-String -->
+            <input type="hidden" name="locationData"
+                   th:value="${#strings.concat(result.address?.getCityOrTown(), ', ', result.address?.road, ', ', result.address?.houseNumber)}">
+
+            <!-- Button zum Auslösen der Aktion -->
+            <button type="submit">Diesen Eintrag auswählen</button>
+        </form>
+    </li>
+</ul>
+
+</body>
+</html>

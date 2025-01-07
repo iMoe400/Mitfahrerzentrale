@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -45,11 +46,15 @@ public class HomeController {
     @GetMapping("/home")
     public String home(Authentication authentication,
                        RedirectAttributes redirectAttributes,
-                       Model model,
-                       @ModelAttribute List<NominatimResponseDTO> seachResponseList) {
+                       Model model, @RequestParam(required = false) String locationData) {
+
+
         User currentUser = userRepo.findUserByName(authentication.getName());
         Optional<List<Ride>> rides = rideRepo.findRideByDriverId(currentUser.getId());
         Optional<List<Booking>> bookings = bookingRepo.findBookingsByPassengerId(currentUser.getId());
+        if(locationData!= null){
+            model.addAttribute("departureData", locationData);
+        }
         if(bookings.isPresent()){
             List<BookingDTO> bookingDTOList = DtoWrapper.bookingsToDTOs(bookings.get());
             model.addAttribute("bookings", bookingDTOList);
@@ -63,6 +68,7 @@ public class HomeController {
         model.addAttribute("user", userDTO);
         return "home";
     }
+
 
 
 

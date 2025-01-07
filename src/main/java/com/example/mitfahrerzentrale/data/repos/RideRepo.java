@@ -18,4 +18,5 @@ public interface RideRepo extends JpaRepository<Ride, Integer> {
     Optional<List<Ride>> findRideByDriverId(int driverId);
     Optional<Ride>findRideById(int id);
     Optional<List<Ride>> findRideByStartLocationAndDestinationLocationAndIsActiveTrueAndStartTime(String startLocation, String destinationLocation, Instant startTime);
+
 }

@@ -24,34 +24,38 @@
 
         <div class="main">
             <form class="ride-inputs" th:action="@{/create-ride}" th:method="post">
-                    <div class="input-container">
-                        <h1>Mitfahrgelegenheit...</h1>
-                    </div>
-                    <div class="input-container" style="margin-bottom: 16px">
-                        <label class="input-label">
-                            <input name="departureLocation" placeholder="Abfahrtsort..." class="inputs" style="width: 100%;">
+                <div class="input-container">
+                    <h1>Mitfahrgelegenheit...</h1>
+                </div>
+                <div class="input-container" style="margin-bottom: 16px">
+                    <!-- Abfahrtsort-Suche -->
+                    <label class="input-label">
+                        <input th:value="${departureData}" name="departureLocation" placeholder="Abfahrtsort..." class="inputs" style="width: 100%;">
+                    </label>
+                    <button type="submit" formaction="/search" formmethod="get">Suchen</button>
+
+                    <!-- Zielort -->
+                    <label class="input-label">
+                        <input name="destinationLocation" placeholder="Zielort..." class="inputs" style="width: 100%;">
+                    </label>
+
+                    <div style="display: flex; flex-direction: row;">
+                        <label class="input-label" style="margin: 0 6px 0 0">
+                            <input type="datetime-local" name="departureTime" class="inputs">
                         </label>
-                        <label class="input-label">
-                            <input name="destinationLocation" placeholder="Zielort..." class="inputs" style="width: 100%;">
+                        <label class="input-label" style="margin: 0 0 0 6px">
+                            <input type="range" name="radius" min="0" max="50" value="25" oninput="this.nextElementSibling.textContent = this.value" class="inputs">
+                            <span style="margin-left: 10px;">25</span><span>KM</span>
                         </label>
-                        <div style="display: flex; flex-direction: row;">
-                            <label class="input-label" style="margin: 0 6px 0 0">
-                                <input type="datetime-local" name="departureTime" class="inputs">
-                            </label>
-                            <label class="input-label" style="margin: 0 0 0 6px">
-                                <input type="range" name="radius" min="0" max="50" value="25" oninput="this.nextElementSibling.textContent = this.value" class="inputs">
-                                <span style="margin-left: 10px;">25</span><span>KM</span>
-                            </label>
-                            <label class="input-label" style="margin: 0 0 0 6px">
-                                <input placeholder="Mitfahrer..." type="number" name="maxPassengers" min="1" required class="inputs">
-                            </label>
-                        </div>
                     </div>
-                    <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 20px;">
-                        <!-- hier eine alternative fetch auf /search-ride-->
-                        <button type="submit" class="NeutralButton" role="button" >...Anbieten</button>
-                    </div>
+                </div>
+                <div style="display: flex; flex-direction: row; gap: 10px; margin-top: 20px;">
+                    <!-- Button für create-ride -->
+                    <button type="submit" class="NeutralButton" role="button">...Anbieten</button>
+                </div>
             </form>
+
+
             <div style="width: 50%; background-color: white; display: flex; justify-content: center; align-items: center;">
                 <div style="width: 100%; padding: 20px; display: flex; flex-direction: column; align-items: center;">
                     <h1 style="margin-bottom: 20px;">Ride Listings</h1>
@@ -60,9 +64,15 @@
                             <label>
                                 <input type="text" name="startQuery" id="startQuery">
                             </label>
+                            <div id="search-ride-departure-result-div">
+
+                            </div>
                             <label>
                                 <input type="text" name="destQuery" id="destQuery">
                             </label>
+                            <div id="search-ride-destination-result-div">
+
+                            </div>
                             <label>
                                 <input type="datetime-local" name="date" id="date">
                             </label>
