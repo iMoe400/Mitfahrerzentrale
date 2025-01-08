@@ -15,6 +15,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "bookings", schema = "mitfahrerzentrale")
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BookingId", nullable = false)

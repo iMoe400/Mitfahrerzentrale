@@ -26,22 +26,24 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam String departureLocation, Model model) {
+    public String search(@RequestParam String location,
+                         @RequestParam String searchType,
+                         @RequestParam(required = false) String departureData,
+                         @RequestParam(required = false) String destinationData,
+                         Model model) {
         try {
-            // Abrufen der Suchergebnisse vom GeocodeController (Service)
-            List<NominatimResponseDTO> searchResults = geocodeController.searchLocation(departureLocation);
+            List<NominatimResponseDTO> searchResults = geocodeController.searchLocation(location);
 
-            // Prüfe, ob Suchergebnisse vorhanden sind, und füge sie dem Model hinzu
-            if (searchResults != null && !searchResults.isEmpty()) {
-                model.addAttribute("searchResults", searchResults);
-            } else {
-                model.addAttribute("message", "Keine Suchergebnisse gefunden.");
-            }
+            model.addAttribute("searchResults", searchResults);
+            model.addAttribute("searchType", searchType);
+            model.addAttribute("departureData", departureData);
+            model.addAttribute("destinationData", destinationData);
+
         } catch (Exception e) {
             model.addAttribute("message", "Ein Fehler ist aufgetreten: " + e.getMessage());
         }
 
-        // Gib den Namen der View zurück, die die Suchergebnisse rendern soll
         return "suchergebnisse";
     }
+
 }

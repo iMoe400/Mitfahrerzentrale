@@ -19,7 +19,7 @@ import java.util.Set;
 public class Ride {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-Inkrement in der Datenbank
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RideId", nullable = false)
     private Integer id;
 
@@ -74,5 +74,8 @@ public class Ride {
 
     @Column(name = "PassengerCount")
     private Integer passengerCount;
+
+    @OneToMany(mappedBy = "ride", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Booking> bookings = new LinkedHashSet<>();
 
 }

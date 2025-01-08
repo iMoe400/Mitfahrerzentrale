@@ -36,10 +36,13 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String showProfile(Authentication auth, Model model) {
-        User user =userRepo.findUserByName(auth.getName());
-        UserDTO userDTO = DtoWrapper.userToDTO(user);
+        User user = userRepo.findUserByName(auth.getName());
+        if (user == null) {
+            throw new IllegalStateException("Benutzer nicht gefunden: " + auth.getName());
+        }
 
-        model.addAttribute("user", userDTO);
+        System.out.println("Profil geladen für Benutzer: " + user.getName());
+        model.addAttribute("user", DtoWrapper.userToDTO(user));
 
         return "show-profile";
     }
@@ -57,23 +60,37 @@ public class ProfileController {
     @PostMapping("/profile/edit")
     public String editProfile(@RequestParam(required = false) String name,
                               @RequestParam(required = false) String email,
-                              @RequestParam(required = false) String telefonnummer,
+                              @RequestParam(required = false) String phoneNumber,
                               @RequestParam(required = false) String password,
-                              @RequestParam(required = false) String passwordConfirm,
+                              @RequestParam(required = false) String confirmPassword,
                               Authentication auth, Model model) {
+
+        // Benutzer abrufen
         User user = userRepo.findUserByName(auth.getName());
+        if (user == null) {
+            model.addAttribute("error", "Benutzer nicht gefunden!");
+            return "edit-profile";
+        }
+
+        // Name aktualisieren
         if (name != null && !name.isEmpty()) {
             user.setName(name);
         }
+
+        // E-Mail aktualisieren
         if (email != null && !email.isEmpty()) {
             user.setEmail(email);
         }
-        if (telefonnummer != null && !telefonnummer.isEmpty()) {
-            user.setPhoneNumber(telefonnummer);
+
+        // Telefonnummer aktualisieren
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            user.setPhoneNumber(phoneNumber);
         }
+
+        // Passwort prüfen und aktualisieren
         if (password != null && !password.isEmpty()) {
-            if (!Objects.equals(password, passwordConfirm)) {
-                model.addAttribute("error", "Password stimmt nicht überein");
+            if (!password.equals(confirmPassword)) {
+                model.addAttribute("error", "Die Passwörter stimmen nicht überein!");
                 return "edit-profile";
             }
             user.setPasswordHash(passwordEncoder.encode(password));
@@ -82,14 +99,16 @@ public class ProfileController {
         // Benutzer speichern
         userRepo.save(user);
 
-        // SecurityContext aktualisieren
+        // SecurityContext aktualisieren (bestehende Logik bleibt erhalten)
         Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                user.getName(),  // Neuer Benutzername
-                auth.getCredentials(), // Aktuelles Passwort
-                auth.getAuthorities()  // Bestehende Berechtigungen
+                user.getName(),
+                auth.getCredentials(),
+                auth.getAuthorities()
         );
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
+        // Weiterleitung zur Profilseite
         return "redirect:/profile";
     }
+
 }

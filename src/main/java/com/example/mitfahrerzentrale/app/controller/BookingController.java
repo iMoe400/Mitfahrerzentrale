@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Objects;
+
 @Controller
 public class BookingController {
 
@@ -29,27 +31,34 @@ public class BookingController {
 
         if(rideId != null) {
             if(rideRepo.findRideById(rideId).isPresent()) {
-                Ride ride = rideRepo.findRideById(rideId).get();
+                if (!Objects.equals(rideRepo.findRideById(rideId).get().getPassengerCount(), rideRepo.findRideById(rideId).get().getMaxPassengers())) {
 
-                try {
-                    Booking booking = new Booking();
-                    booking.setRide(rideRepo.findRideById(rideId).get());
-                    booking.setPassenger(userRepo.findUserByName(authentication.getName()));
-                    if(ride.getPassengerCount()!= null){
-                        booking.setPassengerCount(ride.getPassengerCount()+1);
-                        ride.setPassengerCount(ride.getPassengerCount() + 1);
-                    } else {
-                        booking.setPassengerCount(1);
-                        ride.setPassengerCount(1);
+
+                    Ride ride = rideRepo.findRideById(rideId).get();
+
+                    try {
+                        Booking booking = new Booking();
+                        booking.setRide(rideRepo.findRideById(rideId).get());
+                        booking.setPassenger(userRepo.findUserByName(authentication.getName()));
+                        if (ride.getPassengerCount() != null) {
+                            booking.setPassengerCount(ride.getPassengerCount() + 1);
+                            ride.setPassengerCount(ride.getPassengerCount() + 1);
+                        } else {
+                            booking.setPassengerCount(1);
+                            ride.setPassengerCount(1);
+                        }
+                        booking.setIsActive(true);
+                        bookingRepo.save(booking);
+
+
+                        rideRepo.save(ride);
+
+                    } catch (Exception e) {
+                        model.addAttribute("error", e.getMessage());
                     }
-                    booking.setIsActive(true);
-                    bookingRepo.save(booking);
 
-
-                    rideRepo.save(ride);
-
-                } catch (Exception e) {
-                    model.addAttribute("error", e.getMessage());
+                }   else {
+                    model.addAttribute("error", "Ride already full");
                 }
             } else {
                 model.addAttribute("booking", new Booking());
@@ -60,24 +69,5 @@ public class BookingController {
 
         return "redirect:/home";
     }
-
-
-    @PostMapping("/delete-booking")
-    public String deleteBooking(Authentication authentication, @RequestParam Integer bookingId, @RequestParam Integer rideId, Model model) {
-        Booking booking = bookingRepo.findBookingById(bookingId).get();
-        Ride ride = rideRepo.findRideById(rideId).get();
-
-        bookingRepo.delete(booking);
-        if(ride.getPassengerCount()!= null){
-            ride.setPassengerCount(ride.getPassengerCount() - 1);
-        }else {
-            throw new RuntimeException("Wenn dieser Fehler passiert ist die Physik des Universums unlogisch");
-        }
-
-        return "redirect:/home";
-    }
-
-
-
 
 }

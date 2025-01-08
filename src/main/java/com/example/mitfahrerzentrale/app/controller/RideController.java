@@ -39,7 +39,6 @@ public class RideController {
                              @RequestParam("departureLocation") String departureLocation,
                              @RequestParam("destinationLocation") String destinationLocation,
                              @RequestParam("departureTime") LocalDateTime departureTime,
-                             @RequestParam("radius") Integer radius,
                              Model model){
         System.out.println(maxPassengers);
         double destLat = Double.parseDouble(geocodeController.searchSingleLocation(destinationLocation).getLat());
@@ -48,14 +47,14 @@ public class RideController {
         double startLon =  Double.parseDouble(geocodeController.searchSingleLocation(departureLocation).getLon());
         Ride ride = new Ride();
         ride.setMaxPassengers(maxPassengers);
-        ride.setPrice(BigDecimal.valueOf(Haversine.calculateDistance(startLat, startLon, destLat, destLon)*0.38));
+        ride.setPrice(BigDecimal.valueOf(Haversine.calculateDistance(startLat, startLon, destLat, destLon)*0.30));
         ride.setStartLocation(departureLocation);
         ride.setDestinationLocation(destinationLocation);
         ride.setStartLatCoordinates(startLat);
         ride.setStartLonCoordinates(startLon);
         ride.setDestLonCoordinates(destLon);
         ride.setDestLatCoordinates(destLat);
-        ride.setRadius(radius);
+        ride.setRadius(123);
         ride.setPassengerCount(0);
         ride.setDriver(userRepo.findUserByName(authentication.getName()));
         ride.setStartTime(departureTime.atZone(ZoneId.of("Europe/Berlin")).toInstant());
