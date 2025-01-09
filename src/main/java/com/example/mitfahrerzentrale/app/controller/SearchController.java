@@ -26,18 +26,27 @@ public class SearchController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam String location,
-                         @RequestParam String searchType,
-                         @RequestParam(required = false) String departureData,
-                         @RequestParam(required = false) String destinationData,
-                         Model model) {
+    public String search(
+            @RequestParam String location,
+            @RequestParam String searchType,
+            @RequestParam(required = false) String departureData,
+            @RequestParam(required = false) String departureLat,
+            @RequestParam(required = false) String departureLon,
+            @RequestParam(required = false) String destinationData,
+            @RequestParam(required = false) String destinationLat,
+            @RequestParam(required = false) String destinationLon,
+            Model model) {
         try {
             List<NominatimResponseDTO> searchResults = geocodeController.searchLocation(location);
 
             model.addAttribute("searchResults", searchResults);
             model.addAttribute("searchType", searchType);
             model.addAttribute("departureData", departureData);
+            model.addAttribute("departureLat", departureLat);
+            model.addAttribute("departureLon", departureLon);
             model.addAttribute("destinationData", destinationData);
+            model.addAttribute("destinationLat", destinationLat);
+            model.addAttribute("destinationLon", destinationLon);
 
         } catch (Exception e) {
             model.addAttribute("message", "Ein Fehler ist aufgetreten: " + e.getMessage());
@@ -45,5 +54,4 @@ public class SearchController {
 
         return "suchergebnisse";
     }
-
 }

@@ -25,6 +25,11 @@
                             <input th:value="${departureData}" name="location" id="departureInput" placeholder="Abfahrtsort..." class="form-control">
                             <input type="hidden" name="searchType" value="departure">
                             <input type="hidden" name="destinationData" th:value="${destinationData}">
+                            <input type="hidden" name="departureData" th:value="${departureData}">
+                            <input type="hidden" name="departureLat" th:value="${departureLat}">
+                            <input type="hidden" name="departureLon"  th:value="${departureLon}">
+                            <input type="hidden" name="destinationLat" th:value="${destinationLat}">
+                            <input type="hidden" name="destinationLon" th:value="${destinationLon}">
                         </div>
                         <button type="submit" class="btn btn-primary">Abfahrtsort suchen</button>
                     </form>
@@ -34,7 +39,12 @@
                         <div class="mb-3 text-start">
                             <input th:value="${destinationData}" id="destinationInput" name="location" placeholder="Zielort..." class="form-control">
                             <input type="hidden" name="searchType" value="destination">
+                            <input type="hidden" name="destinationData" th:value="${destinationData}">
                             <input type="hidden" name="departureData" th:value="${departureData}">
+                            <input type="hidden" name="departureLat" th:value="${departureLat}">
+                            <input type="hidden" name="departureLon" th:value="${departureLon}">
+                            <input type="hidden" name="destinationLat" th:value="${destinationLat}">
+                            <input type="hidden" name="destinationLon" th:value="${destinationLon}">
                         </div>
                         <button type="submit" class="btn btn-primary">Zielort suchen</button>
                     </form>
@@ -49,8 +59,12 @@
                             <label for="maxPassengers" class="form-label">Maximale Passagiere</label>
                             <input type="number" name="maxPassengers" id="maxPassengers" min="0" max="8" class="form-control">
                         </div>
-                        <input type="hidden" name="departureLocation" id="hiddenDepartureLocation">
-                        <input type="hidden" name="destinationLocation" id="hiddenDestinationLocation">
+                        <input type="hidden" name="departureLocation" id="hiddenDepartureLocation" th:value="${departureData}">
+                        <input type="hidden" name="destinationLocation" id="hiddenDestinationLocation" th:value="${destinationData}">
+                        <input type="hidden" name="destinationLat" id="hiddenDestinationLat"  th:value="${destinationLat}">
+                        <input type="hidden" name="destinationLon" id="hiddenDestinationLon"  th:value="${destinationLon}">
+                        <input type="hidden" name="departureLat" id="hiddenDepartureLatInput" th:value="${departureLat}">
+                        <input type="hidden" name="departureLon" id="hiddenDepartureLonInput"  th:value="${departureLon}">
                         <button type="submit" class="btn btn-success">Fahrt anbieten</button>
                     </form>
                 </div>
@@ -174,13 +188,20 @@
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 
-<script th:inline="javascript">
+<script >
+
+    /*
     const createRideForm = document.querySelector(".ride-inputs");
 
     createRideForm.addEventListener("submit", function (event) {
         document.getElementById("hiddenDepartureLocation").value = document.getElementById("departureInput").value;
         document.getElementById("hiddenDestinationLocation").value = document.getElementById("destinationInput").value;
-    });
+        document.getElementById("hiddenDepartureLatInput").value = document.getElementById("destinationInput").value;
+        document.getElementById("hiddenDepartureLonInput").value = document.getElementById("destinationInput").value;
+        document.getElementById("hiddenDestinationLat").value = document.getElementById("destinationInput").value;
+        document.getElementById("hiddenDestinationLon").value = document.getElementById("destinationInput").value;
+
+    });*/
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

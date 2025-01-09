@@ -39,12 +39,16 @@ public class RideController {
                              @RequestParam("departureLocation") String departureLocation,
                              @RequestParam("destinationLocation") String destinationLocation,
                              @RequestParam("departureTime") LocalDateTime departureTime,
+                             @RequestParam("departureLat") String departureLat,
+                             @RequestParam("departureLon") String departureLon,
+                             @RequestParam("destinationLat") String destinationLat,
+                             @RequestParam("destinationLon") String destinationLon,
                              Model model){
         System.out.println(maxPassengers);
-        double destLat = Double.parseDouble(geocodeController.searchSingleLocation(destinationLocation).getLat());
-        double destLon = Double.parseDouble(geocodeController.searchSingleLocation(destinationLocation).getLon());
-        double startLat = Double.parseDouble(geocodeController.searchSingleLocation(departureLocation).getLat());
-        double startLon =  Double.parseDouble(geocodeController.searchSingleLocation(departureLocation).getLon());
+        double destLat = Double.parseDouble(destinationLat);
+        double destLon = Double.parseDouble(destinationLon);
+        double startLat = Double.parseDouble(departureLat);
+        double startLon =  Double.parseDouble(departureLon);
         Ride ride = new Ride();
         ride.setMaxPassengers(maxPassengers);
         ride.setPrice(BigDecimal.valueOf(Haversine.calculateDistance(startLat, startLon, destLat, destLon)*0.30));

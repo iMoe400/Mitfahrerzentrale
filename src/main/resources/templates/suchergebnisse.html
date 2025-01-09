@@ -45,9 +45,15 @@
                     <div class="col-md-4 d-flex align-items-center justify-content-end">
                         <input type="hidden" name="locationData"
                                th:value="${#strings.concat(result.address?.getCityOrTown(), ', ', result.address?.road, ', ', result.address?.houseNumber)}">
+                        <input type="hidden" name="locationLat" th:value="${result.getLat()}">
+                        <input type="hidden" name="locationLon" th:value="${result.getLon()}">
                         <input type="hidden" name="searchType" th:value="${searchType}">
                         <input type="hidden" name="departureData" th:value="${departureData}">
+                        <input type="hidden" name="departureLat" th:value="${departureLat}">
+                        <input type="hidden" name="departureLon" th:value="${departureLon}">
                         <input type="hidden" name="destinationData" th:value="${destinationData}">
+                        <input type="hidden" name="destinationLat" th:value="${destinationLat}">
+                        <input type="hidden" name="destinationLon" th:value="${destinationLon}">
                         <button type="submit" class="btn btn-primary">Diesen Eintrag auswählen</button>
                     </div>
                 </div>
