@@ -60,7 +60,7 @@ public class RideService {
             ride = rideRepository.findRideByBookings(bookingIds);
             ride.ifPresent(value -> value.getBookings().remove(booking));
             if(ride.isPresent()) {
-                ride.get().setPassengerCount(-1);
+                ride.get().setPassengerCount(ride.get().getPassengerCount()-1);
                 rideRepository.save(ride.get());
             }
 

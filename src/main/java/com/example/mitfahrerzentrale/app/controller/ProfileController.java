@@ -93,8 +93,6 @@ public class ProfileController {
                 return "redirect:/profile";
             }
             user.setPasswordHash(passwordEncoder.encode(password));
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Password nicht angegeben!");
         }
 
         // Benutzer speichern
