@@ -4,163 +4,237 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body class="bg-light text-white">
 
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/error :: error}"></div>
 
-<div class="container py-4">
-    <div class="row g-4">
-        <!-- Linke Spalte -->
-        <div class="col-lg-6 d-flex flex-column align-items-center">
-            <div class="card w-100">
-                <div class="card-body text-center">
-                    <h2 class="card-title mb-4">Fahrt anbieten</h2>
+<div th:replace="~{fragments/navbar :: navbar}" class="bg-dark"></div>
 
-                    <!-- Abfahrtsort-Suche -->
-                    <form th:action="@{/search}" method="get" class="mb-3">
-                        <div class="mb-3 text-start">
-                            <input th:value="${departureData}" name="location" id="departureInput" placeholder="Abfahrtsort..." class="form-control">
-                            <input type="hidden" name="searchType" value="departure">
-                            <input type="hidden" name="destinationData" th:value="${destinationData}">
-                            <input type="hidden" name="departureData" th:value="${departureData}">
-                            <input type="hidden" name="departureLat" th:value="${departureLat}">
-                            <input type="hidden" name="departureLon"  th:value="${departureLon}">
-                            <input type="hidden" name="destinationLat" th:value="${destinationLat}">
-                            <input type="hidden" name="destinationLon" th:value="${destinationLon}">
+<div class="container-fluid" style="height: calc(100vh - 8vh); padding: 0 0 16px 0;">
+    <div style="margin-right: 32px;margin-left: 32px" th:if="${user.getRole().equals('ADMIN')}">
+        <div class="container-fluid " style=" padding: 0 0 16px 0;"> <!-- Volle Breite -->
+            <!-- Angebotene Fahrten -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card bg-light text-dark border-light" style="height: 400px;"> <!-- Feste Höhe -->
+                        <div class="card-body">
+                            <h2 class="card-title">Angebotene Fahrten</h2>
+                            <div style="height: calc(100% - 40px); overflow-y: auto;"> <!-- Scrollbarer Bereich -->
+                                <table class="table table-light table-striped table-hover table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Abfahrtsort</th>
+                                        <th>Zielort</th>
+                                        <th>Max. Passengers</th>
+                                        <th>Abfahrtszeit</th>
+                                        <th>Kilometergeld</th>
+                                        <th>Aktion</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="ride : ${rides}">
+                                        <td th:text="${ride.startLocation}">Berlin</td>
+                                        <td th:text="${ride.startLocation}">Berlin</td>
+                                        <td th:text="${ride.destinationLocation}">Hamburg</td>
+                                        <td th:text="${ride.maxPassengers}">01.01.2025 12:00</td>
+                                        <td th:text="${ride.startTime}">01.01.2025 12:00</td>
+                                        <td th:text="${ride.price}">01.01.2025 12:00</td>
+                                        <td>
+                                            <form th:action="@{/delete-ride}" method="post">
+                                                <input type="hidden" name="rideId" th:value="${ride.id}"/>
+                                                <button type="submit" class="btn btn-danger">Löschen</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Abfahrtsort suchen</button>
-                    </form>
-
-                    <!-- Zielort-Suche -->
-                    <form th:action="@{/search}" method="get" class="mb-3">
-                        <div class="mb-3 text-start">
-                            <input th:value="${destinationData}" id="destinationInput" name="location" placeholder="Zielort..." class="form-control">
-                            <input type="hidden" name="searchType" value="destination">
-                            <input type="hidden" name="destinationData" th:value="${destinationData}">
-                            <input type="hidden" name="departureData" th:value="${departureData}">
-                            <input type="hidden" name="departureLat" th:value="${departureLat}">
-                            <input type="hidden" name="departureLon" th:value="${departureLon}">
-                            <input type="hidden" name="destinationLat" th:value="${destinationLat}">
-                            <input type="hidden" name="destinationLon" th:value="${destinationLon}">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Zielort suchen</button>
-                    </form>
-
-                    <!-- Fahrt anbieten -->
-                    <form class="ride-inputs" th:action="@{/create-ride}" method="post">
-                        <div class="mb-3 text-start">
-                            <label for="departureTime" class="form-label">Abfahrtszeit</label>
-                            <input type="datetime-local" name="departureTime" id="departureTime" class="form-control">
-                        </div>
-                        <div class="mb-3 text-start">
-                            <label for="maxPassengers" class="form-label">Maximale Passagiere</label>
-                            <input type="number" name="maxPassengers" id="maxPassengers" min="0" max="8" class="form-control">
-                        </div>
-                        <input type="hidden" name="departureLocation" id="hiddenDepartureLocation" th:value="${departureData}">
-                        <input type="hidden" name="destinationLocation" id="hiddenDestinationLocation" th:value="${destinationData}">
-                        <input type="hidden" name="destinationLat" id="hiddenDestinationLat"  th:value="${destinationLat}">
-                        <input type="hidden" name="destinationLon" id="hiddenDestinationLon"  th:value="${destinationLon}">
-                        <input type="hidden" name="departureLat" id="hiddenDepartureLatInput" th:value="${departureLat}">
-                        <input type="hidden" name="departureLon" id="hiddenDepartureLonInput"  th:value="${departureLon}">
-                        <button type="submit" class="btn btn-success">Fahrt anbieten</button>
-                    </form>
+                    </div>
                 </div>
             </div>
 
+            <!-- Gebuchte Fahrten -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card bg-light text-dark border-light" style="height: 400px;"> <!-- Feste Höhe -->
+                        <div class="card-body">
+                            <h2 class="card-title">Gebuchte Fahrten</h2>
+                            <div style="height: calc(100% - 40px); overflow-y: auto;"> <!-- Scrollbarer Bereich -->
+                                <table class="table table-light table-striped table-hover table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Abfahrtsort</th>
+                                        <th>Zielort</th>
+                                        <th>Abfahrtszeit</th>
+                                        <th>Passagiere</th>
+                                        <th>Aktion</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="booking : ${bookings}">
+                                        <td th:text="${booking.departureLocation}">Berlin</td>
+                                        <td th:text="${booking.destinationLocation}">Hamburg</td>
+                                        <td th:text="${booking.departureTime}">01.01.2025 14:00</td>
+                                        <td th:text="${booking.passengerCount}">2</td>
+                                        <td>
+                                            <form th:action="@{/deleteBooking}" method="post">
+                                                <input type="hidden" name="bookingId" th:value="${booking.bookingId}"/>
+                                                <button type="submit" class="btn btn-danger">Löschen</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-right: 32px; margin-left: 32px" th:if="${user.getRole().equals('USER')}" class="row g-4">
+        <!-- Linke Spalte -->
+        <div class="col-lg-5 col-md-12 d-flex flex-column align-items-center">
+            <div class="card bg-light text-dark w-100 border-light shadow">
+                <div class="card-body text-center">
+                    <h2 class="card-title mb-4">Fahrt anbieten</h2>
+                    <!-- Abfahrtsort-Suche -->
+                    <form th:action="@{/search}" method="get" class="mb-3">
+                        <div class="mb-3 text-start">
+                            <input th:value="${departureData}" name="location" id="departureInput"
+                                   placeholder="Abfahrtsort..." class="form-control bg-light text-dark border-lightr">
+                            <input type="hidden" name="searchType" value="departure">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Abfahrtsort suchen</button>
+                    </form>
+                    <!-- Zielort-Suche -->
+                    <form th:action="@{/search}" method="get" class="mb-3">
+                        <div class="mb-3 text-start">
+                            <input th:value="${destinationData}" id="destinationInput" name="location"
+                                   placeholder="Zielort..." class="form-control bg-light text-dark border-lightr">
+                            <input type="hidden" name="searchType" value="destination">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Zielort suchen</button>
+                    </form>
+                    <!-- Fahrt anbieten -->
+                    <form class="row g-3" th:action="@{/create-ride}" method="post">
+                        <div class="col-md-6">
+                            <input placeholder="Abfahrtszeit" type="text" name="departureTime" id="departureTime"
+                                   class="form-control bg-light text-dark border-lightr"
+                                   onfocus="this.type='date'; this.focus();" onblur="this.type='text';">
+                        </div>
+                        <div class="col-md-6">
+                            <input placeholder="Max. Passagiere" type="number" name="maxPassengers" id="maxPassengers"
+                                   min="1" max="8" class="form-control bg-light text-dark border-lightr">
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-success w-100">Fahrt anbieten</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <!-- Angebotene Fahrten -->
-            <div class="card w-100 mt-4">
+            <div class="card bg-light text-dark w-100 mt-4 border-light shadow">
                 <div class="card-body text-center">
                     <h2 class="card-title mb-4">Deine angebotenen Fahrten</h2>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Abfahrtsort</th>
-                            <th>Zielort</th>
-                            <th>Abfahrtszeit</th>
-                            <th>Aktionen</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="ride : ${offeredRides}">
-                            <td th:text="${ride.startLocation}">Berlin</td>
-                            <td th:text="${ride.destinationLocation}">Hamburg</td>
-                            <td th:text="${ride.startTime}">2025-01-03 14:00</td>
-                            <td>
-                                <form th:action="@{/delete-ride}" method="post">
-                                    <input type="hidden" name="rideId" th:value="${ride.id}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Löschen</button>
-                                </form>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table class="table table-light table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Abfahrtsort</th>
+                                <th>Zielort</th>
+                                <th>Abfahrtszeit</th>
+                                <th>Aktionen</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="ride : ${offeredRides}">
+                                <td th:text="${ride.startLocation}">Berlin</td>
+                                <td th:text="${ride.destinationLocation}">Hamburg</td>
+                                <td th:text="${ride.getStartTime()}">2025-01-03 14:00</td>
+                                <td>
+                                    <form th:action="@{/delete-ride}" method="post">
+                                        <input type="hidden" name="rideId" th:value="${ride.id}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Löschen</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Rechte Spalte -->
-        <div class="col-lg-6 d-flex flex-column align-items-center">
-            <div class="card w-100">
+        <div class="col-lg-7 col-md-12 d-flex flex-column align-items-center" style="margin-bottom: 32px">
+            <div class="card bg-light text-dark w-100 border-light shadow">
                 <div class="card-body text-center">
                     <h2 class="card-title mb-4">Fahrten suchen</h2>
                     <form th:action="@{/search-rides}" method="get" class="mb-4">
                         <div class="row g-2">
                             <div class="col">
-                                <input type="text" name="startQuery" class="form-control" placeholder="Startort (Straße)">
+                                <input type="text" name="startQuery"
+                                       class="form-control bg-light text-dark border-lightr" placeholder="Startort">
                             </div>
                             <div class="col">
-                                <input type="text" name="destinationQuery" class="form-control" placeholder="Zielort (Straße)">
+                                <input type="text" name="destinationQuery"
+                                       class="form-control bg-light text-dark border-lightr" placeholder="Zielort">
                             </div>
                         </div>
                         <div class="mt-3">
                             <button type="submit" class="btn btn-primary w-100">Suchen</button>
                         </div>
                     </form>
-
-                    <h3>Suchergebnisse</h3>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Abfahrtsort</th>
-                            <th>Zielort</th>
-                            <th>Abfahrtszeit</th>
-                            <th>Preis</th>
-                            <th>Aktionen</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="ride : ${rides}">
-                            <td th:text="${ride.startLocation}">Berlin</td>
-                            <td th:text="${ride.destinationLocation}">Hamburg</td>
-                            <td th:text="${ride.startTime}">2025-01-03 14:00</td>
-                            <td th:text="${ride.price}">20 €</td>
-                            <td>
-                                <form th:action="@{/create-booking}" method="post">
-                                    <input type="hidden" name="rideId" th:value="${ride.id}">
-                                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-                                    <button type="submit" class="btn btn-secondary">Buchen</button>
-                                </form>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div th:if="${rides != null}" style="overflow-y: auto; max-height: 400px;">
+                        <h3>Suchergebnisse</h3>
+                        <table class="table table-light table-striped">
+                            <thead>
+                            <tr>
+                                <th>Abfahrtsort</th>
+                                <th>Zielort</th>
+                                <th>Abfahrtszeit</th>
+                                <th>Preis</th>
+                                <th>Aktionen</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="ride : ${rides}">
+                                <td th:text="${ride.startLocation}">Berlin</td>
+                                <td th:text="${ride.destinationLocation}">Hamburg</td>
+                                <td th:text="${ride.startTime}">2025-01-03 14:00</td>
+                                <td th:text="${ride.price}">20 €</td>
+                                <td>
+                                    <form th:action="@{/create-booking}" method="post">
+                                        <input type="hidden" name="rideId" th:value="${ride.id}">
+                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                                        <button type="submit" class="btn btn-secondary">Buchen</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Gebuchte Fahrten -->
-            <div class="card w-100 mt-4">
-                <div class="card-body text-center">
+            <div class="card bg-light text-dark w-100 mt-4 border-light shadow">
+                <div class="card-body text-center" style="overflow-y: auto; margin-bottom: 16px; max-height: 400px;">
                     <h2 class="card-title mb-4">Deine gebuchten Fahrten</h2>
-                    <table class="table table-striped">
+                    <table class="table table-light table-striped">
                         <thead>
                         <tr>
                             <th>Abfahrtsort</th>
                             <th>Zielort</th>
                             <th>Abfahrtszeit</th>
                             <th>Passagiere</th>
+                            <th>Max. Passagiere</th>
                             <th>Aktionen</th>
                         </tr>
                         </thead>
@@ -169,7 +243,8 @@
                             <td th:text="${booking.departureLocation}">Berlin</td>
                             <td th:text="${booking.destinationLocation}">Hamburg</td>
                             <td th:text="${booking.departureTime}">2025-01-03 14:00</td>
-                            <td th:text="${booking.passengerCount}">2</td>
+                            <td th:text="${booking.passengerCount}"></td>
+                            <td th:text="${booking.maxPassengerCount}"></td>
                             <td>
                                 <form th:action="@{/delete-booking}" method="post">
                                     <input type="hidden" name="bookingId" th:value="${booking.bookingId}">
@@ -186,23 +261,7 @@
     </div>
 </div>
 
-<div th:replace="~{fragments/footer :: footer}"></div>
-
-<script >
-
-    /*
-    const createRideForm = document.querySelector(".ride-inputs");
-
-    createRideForm.addEventListener("submit", function (event) {
-        document.getElementById("hiddenDepartureLocation").value = document.getElementById("departureInput").value;
-        document.getElementById("hiddenDestinationLocation").value = document.getElementById("destinationInput").value;
-        document.getElementById("hiddenDepartureLatInput").value = document.getElementById("destinationInput").value;
-        document.getElementById("hiddenDepartureLonInput").value = document.getElementById("destinationInput").value;
-        document.getElementById("hiddenDestinationLat").value = document.getElementById("destinationInput").value;
-        document.getElementById("hiddenDestinationLon").value = document.getElementById("destinationInput").value;
-
-    });*/
-</script>
+<script th:src="@{/script/mini.js}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

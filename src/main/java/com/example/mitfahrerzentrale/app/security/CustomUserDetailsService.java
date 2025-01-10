@@ -1,4 +1,4 @@
-package com.example.mitfahrerzentrale.data.security;
+package com.example.mitfahrerzentrale.app.security;
 
 
 import com.example.mitfahrerzentrale.data.entities.User;
@@ -11,13 +11,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
-
 @Slf4j
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepo userRepository;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

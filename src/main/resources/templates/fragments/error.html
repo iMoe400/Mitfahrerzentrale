@@ -1,0 +1,12 @@
+<div  th:if="${error != null and error != ''}" th:fragment="error" class="error-overlay d-flex justify-content-center align-items-center">
+    <div class="error-box bg-danger text-white rounded shadow p-4 position-relative">
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close" onclick="redirectToHome()"></button>
+        <h4 class="text-center mb-3">Fehler</h4>
+        <p th:text="${error}" class="text-center"></p>
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-light" onclick="redirectToHome()">OK</button>
+        </div>
+    </div>
+</div>
+
+

@@ -15,42 +15,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class RideSearchController {
+public class SearchRidesController {
 
     private final RideRepo rideRepo;
     private final UserRepo userRepo;
 
     @Autowired
-    public RideSearchController(RideRepo rideRepo, UserRepo userRepo) {
+    public SearchRidesController(RideRepo rideRepo, UserRepo userRepo) {
         this.rideRepo = rideRepo;
         this.userRepo = userRepo;
     }
 
     @GetMapping("/search-rides")
-    public String searchRides(
-            @RequestParam(required = false) String startQuery,
-            @RequestParam(required = false) String destinationQuery,
-            Authentication authentication,
-            RedirectAttributes redirectAttributes) {
-
+    public String searchRides(@RequestParam(required = false) String startQuery, @RequestParam(required = false) String destinationQuery, Authentication authentication, RedirectAttributes redirectAttributes) {
+        // Wenn beide Felder leer sind, Fehler anzeigen
+        if ((startQuery == null || startQuery.isEmpty()) && (destinationQuery == null || destinationQuery.isEmpty())) {
+            redirectAttributes.addFlashAttribute("error", "Gebe bitte einen Start- oder Zielort an!");
+            return "redirect:/home";
+        }
         // Aktuellen Nutzer abrufen
         User currentUser = userRepo.findUserByName(authentication.getName());
         Integer currentUserId = currentUser.getId();
 
         Optional<List<Ride>> filteredRides;
 
-        if (startQuery != null && destinationQuery != null) {
-            filteredRides = rideRepo.findByStartLocationContainingIgnoreCaseAndDestinationLocationContainingIgnoreCaseAndDriverIdNot(
-                    startQuery, destinationQuery, currentUserId);
-        } else if (startQuery != null) {
-            filteredRides = rideRepo.findByStartLocationContainingIgnoreCaseAndDriverIdNot(
-                    startQuery, currentUserId);
-        } else if (destinationQuery != null) {
-            filteredRides = rideRepo.findByDestinationLocationContainingIgnoreCaseAndDriverIdNot(
-                    destinationQuery, currentUserId);
-        } else {
-            filteredRides = Optional.of(rideRepo.findAll());
-        }
+        filteredRides = rideRepo.findByStartLocationContainingIgnoreCaseAndDestinationLocationContainingIgnoreCaseAndDriverIdNot(startQuery, destinationQuery, currentUserId);
 
         // Nur Fahrten, die nicht vom aktuellen Nutzer erstellt wurden, hinzufügen
         if (filteredRides.isPresent() && !filteredRides.get().isEmpty()) {

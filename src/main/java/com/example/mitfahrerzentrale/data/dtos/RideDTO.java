@@ -22,7 +22,7 @@ public class RideDTO {
     private Boolean isActive;
     private Instant createdAt;
     private Instant arrivalTime;
-    private Instant startTime;
+    private String startTime;
     private Double destLatCoordinates;
     private Double startLatCoordinates;
     private Double startLonCoordinates;

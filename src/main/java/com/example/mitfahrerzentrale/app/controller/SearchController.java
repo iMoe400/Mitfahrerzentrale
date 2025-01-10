@@ -1,28 +1,27 @@
 package com.example.mitfahrerzentrale.app.controller;
 
-import com.example.mitfahrerzentrale.data.entities.Ride;
-import com.example.mitfahrerzentrale.data.repos.RideRepo;
 import com.example.mitfahrerzentrale.geo.GeocodeController;
 import com.example.mitfahrerzentrale.geo.dto.NominatimResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 public class SearchController {
 
-    private final RideRepo rideRepo;
 
-    @Autowired
-    GeocodeController geocodeController;
+    private final GeocodeController geocodeController;
 
-    public SearchController(RideRepo rideRepo) {
-        this.rideRepo = rideRepo;
+
+    public SearchController(@Autowired GeocodeController geocodeController) {
+        this.geocodeController = geocodeController;
     }
 
     @GetMapping("/search")
@@ -35,21 +34,31 @@ public class SearchController {
             @RequestParam(required = false) String destinationData,
             @RequestParam(required = false) String destinationLat,
             @RequestParam(required = false) String destinationLon,
-            Model model) {
+            Model model, RedirectAttributes redirectAttributes) {
         try {
             List<NominatimResponseDTO> searchResults = geocodeController.searchLocation(location);
+            if(location == null) {
+                redirectAttributes.addFlashAttribute("error", "Ohne Angaben, keine Ergebnisse");
+                return "redirect:/home";
+            }
+            if(!location.isEmpty()) {
+                model.addAttribute("searchResults", searchResults);
+                model.addAttribute("searchType", searchType);
+                model.addAttribute("departureData", departureData);
+                model.addAttribute("departureLat", departureLat);
+                model.addAttribute("departureLon", departureLon);
+                model.addAttribute("destinationData", destinationData);
+                model.addAttribute("destinationLat", destinationLat);
+                model.addAttribute("destinationLon", destinationLon);
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Es gab keine Ergebnisse für ihre Suche. Bitte versuchen Sie den Ort genauer anzugeben");
+                return "redirect:/home";
+            }
 
-            model.addAttribute("searchResults", searchResults);
-            model.addAttribute("searchType", searchType);
-            model.addAttribute("departureData", departureData);
-            model.addAttribute("departureLat", departureLat);
-            model.addAttribute("departureLon", departureLon);
-            model.addAttribute("destinationData", destinationData);
-            model.addAttribute("destinationLat", destinationLat);
-            model.addAttribute("destinationLon", destinationLon);
+
 
         } catch (Exception e) {
-            model.addAttribute("message", "Ein Fehler ist aufgetreten: " + e.getMessage());
+            log.warn(e.getMessage());
         }
 
         return "suchergebnisse";

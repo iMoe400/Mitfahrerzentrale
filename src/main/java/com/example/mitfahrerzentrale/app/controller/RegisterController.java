@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,18 +16,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class RegisterController {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepo userRepo;
+
+    RegisterController(@Autowired UserRepo userRepo, @Autowired PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+
+    }
 
     @PostMapping("/register/create")
-    public String confirmRegisterForm(Model model, @RequestParam(value = "username", required = false) String username,
-                                      @RequestParam(value = "email", required = false) String email,
-                                      @RequestParam(value = "phone_number", required = false) String phoneNumber,
-                                      @RequestParam(value = "password", required = false) String password, RedirectAttributes redirectAttributes) {
+    public String confirmRegisterForm(@RequestParam(value = "username", required = false) String username, @RequestParam(value = "email", required = false) String email, @RequestParam(value = "phone_number", required = false) String phoneNumber, @RequestParam(value = "password", required = false) String password, RedirectAttributes redirectAttributes) {
 
         try {
+            if (userRepo.existsByEmail(email) || userRepo.existsByName(username) || userRepo.existsByPhoneNumber(phoneNumber)) {
+                redirectAttributes.addFlashAttribute("error", "User already exists");
+                return "redirect:/register";
+            }
             User user = new User();
 
             String hashedPassword = passwordEncoder.encode(password);
@@ -44,6 +48,7 @@ public class RegisterController {
             redirectAttributes.addAttribute("password", password);
         } catch (Exception e) {
             log.error(e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         return "redirect:/login";
     }

@@ -7,7 +7,8 @@ import com.example.mitfahrerzentrale.data.entities.Booking;
 import com.example.mitfahrerzentrale.data.entities.Ride;
 import com.example.mitfahrerzentrale.data.entities.User;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class DtoWrapper {
         RideDTO rideDTO = new RideDTO();
         rideDTO.setId(ride.getId());
         rideDTO.setRadius(ride.getRadius());
-        rideDTO.setStartTime(ride.getStartTime());
+        rideDTO.setStartTime(DateTimeFormatterUtil.formatWithZone(LocalDateTime.ofInstant(ride.getStartTime(), ZoneId.of("Europe/Berlin")), "Europe/Berlin", "dd.MM.yyyy HH:mm"));
         rideDTO.setPassengerCount(ride.getPassengerCount());
         rideDTO.setPrice(ride.getPrice());
         rideDTO.setStartLocation(ride.getStartLocation());

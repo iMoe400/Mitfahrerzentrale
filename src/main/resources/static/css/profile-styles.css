@@ -1,80 +1,58 @@
-/* General styles */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-/* Profile Container */
+/* Profile container */
 .profile-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 20px;
 }
 
-/* Profile Content */
+/* Profile content */
 .profile-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-}
-
-/* Profile Card */
-.profile-card {
-    width: 80%;
-    max-width: 600px;
     background-color: #fff;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 30px;
 }
 
-/* Profile Rows */
+/* Profile card */
+.profile-card {
+    margin-bottom: 30px;
+}
+
+/* Profile row */
 .profile-row {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
 }
 
-.profile-row:last-child {
-    border-bottom: none;
-}
-
-/* Labels and Values */
+/* Profile labels */
 .profile-label {
-    font-size: 14px;
     font-weight: bold;
-    color: #555;
-}
-
-.profile-value {
-    font-size: 14px;
     color: #333;
 }
 
-/* Edit Button */
+/* Profile values */
+.profile-value {
+    color: #555;
+}
+
+/* Edit button */
+.edit-button-container {
+    display: flex;
+    justify-content: center;
+}
+
 .edit-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #fff;
     background-color: #007bff;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    width: 100%;
 }
 
 .edit-button:hover {
     background-color: #0056b3;
-}
-
-.edit-button-container {
-    display: flex;
-    justify-content: center; /* Zentriert den Button */
-    margin-top: 20px; /* Abstand nach oben */
 }

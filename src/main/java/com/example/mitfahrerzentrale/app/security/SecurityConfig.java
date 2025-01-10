@@ -1,4 +1,4 @@
-package com.example.mitfahrerzentrale.data.security;
+package com.example.mitfahrerzentrale.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,21 +24,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/**").permitAll()  // Registrierung und Login erlauben
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/home")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                );
+        http.authorizeHttpRequests(requests -> requests.requestMatchers("/**").permitAll()  // Registrierung und Login erlauben
+                .anyRequest().authenticated()).formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/home").permitAll()).logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll());
 
         return http.build();
     }

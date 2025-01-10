@@ -56,11 +56,7 @@ public class NominatimResponseDTO {
 
         // Hilfsmethode für die Stadt oder Gemeinde
         public String getCityOrTown() {
-            return city != null ? city :
-                    town != null ? town :
-                            village != null ? village :
-                                    hamlet != null ? hamlet :
-                                            "Keine Stadt verfügbar";
+            return city != null ? city : town != null ? town : village != null ? village : hamlet != null ? hamlet : "Keine Stadt verfügbar";
         }
     }
 }

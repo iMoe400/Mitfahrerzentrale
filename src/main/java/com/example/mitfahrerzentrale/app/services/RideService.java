@@ -6,21 +6,26 @@ import com.example.mitfahrerzentrale.data.repos.BookingRepo;
 import com.example.mitfahrerzentrale.data.repos.RideRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RideService {
 
-    @Autowired
+
     private final RideRepo rideRepository;
-    @Autowired
+
     private final BookingRepo bookingRepository;
 
-    public RideService(RideRepo rideRepository, BookingRepo bookingRepository) {
-        this.rideRepository = rideRepository;
-        this.bookingRepository = bookingRepository;
+    RideService(@Autowired RideRepo rideRepo, @Autowired BookingRepo bookingRepo) {
+        this.rideRepository = rideRepo;
+        this.bookingRepository = bookingRepo;
     }
+
 
     public List<Ride> getRidesOfferedByUser(Integer userId) {
         // Angebotene Fahrten eines Nutzers abrufen
@@ -30,16 +35,8 @@ public class RideService {
         return null;
     }
 
-    public List<Booking> getRidesBookedByUser(Integer userId) {
-        // Gebuchte Fahrten eines Nutzers abrufen
-        if(bookingRepository.findAllByPassengerId(userId).isPresent()){
-            return bookingRepository.findAllByPassengerId(userId).get();
-        }
-        return null;
-    }
+    public void deleteOfferedRide(Integer rideId, int id) {
 
-    public void deleteOfferedRide(Integer rideId) {
-        // Überprüfen, ob der Nutzer die Fahrt tatsächlich anbietet
         Ride ride = rideRepository.findRideById(rideId)
                 .orElseThrow(() -> new IllegalArgumentException("Ungültige Fahrt-ID oder Berechtigung verweigert"));
 
@@ -50,12 +47,23 @@ public class RideService {
     public void deleteBookedRide(Integer bookingId, Integer rideId) {
         Optional<Ride> ride = rideRepository.findRideById(rideId);
 
-        // Überprüfen, ob der Nutzer die Fahrt gebucht hat
+
         Booking booking = bookingRepository.findBookingById(bookingId)
                 .orElseThrow(() -> new IllegalArgumentException("Ungültige Buchung oder Berechtigung verweigert"));
-        if(bookingRepository.findAllByRideId(rideId).isPresent()){
-            ride = rideRepository.findRideByBookings(bookingRepository.findAllByRideId(rideId).get());
+
+        Optional<List<Booking>> bookingList = bookingRepository.findAllByRideId(rideId);
+        if(bookingList.isPresent()){
+            Set<Booking> bookingSet = new HashSet<>(bookingList.get());
+            Set<Integer> bookingIds = bookingSet.stream()
+                    .map(Booking::getId) // IDs extrahieren
+                    .collect(Collectors.toSet());
+            ride = rideRepository.findRideByBookings(bookingIds);
             ride.ifPresent(value -> value.getBookings().remove(booking));
+            if(ride.isPresent()) {
+                ride.get().setPassengerCount(-1);
+                rideRepository.save(ride.get());
+            }
+
         }
 
         // Buchung löschen

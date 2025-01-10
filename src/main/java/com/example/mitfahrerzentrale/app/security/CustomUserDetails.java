@@ -1,4 +1,4 @@
-package com.example.mitfahrerzentrale.data.security;
+package com.example.mitfahrerzentrale.app.security;
 
 import com.example.mitfahrerzentrale.data.entities.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,6 +35,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.getIsActive();
+    }
+
+    public int getId() {
+        return user.getId();
     }
 
 

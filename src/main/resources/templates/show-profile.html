@@ -1,43 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/profile-styles.css}">
-
 </head>
 <body>
-<div class="profile-container">
-    <!-- Navbar -->
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/error :: error}"></div>
+<div th:replace="~{fragments/navbar :: navbar}" class="bg-dark"></div>
 
-    <!-- Profile Content -->
-    <div class="profile-content">
-        <div class="profile-card">
-            <div class="profile-row">
-                <span class="profile-label">Name:</span>
-                <span class="profile-value" th:text="${user.name}"></span>
-            </div>
-            <div class="profile-row">
-                <span class="profile-label">Email:</span>
-                <span class="profile-value" th:text="${user.email}"></span>
-            </div>
-            <div class="profile-row">
-                <span class="profile-label">Phone Number:</span>
-                <span class="profile-value" th:text="${user.phoneNumber}"></span>
-            </div>
-            <div class="profile-row">
-                <span class="profile-label">Password:</span>
-                <span class="profile-value">XXXXXXX</span>
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-md-6 col-lg-5">
+        <!-- Profil Content -->
+        <h2 class="text-center mb-4">Profil</h2>
+        <div class="card bg-light text-dark border-light shadow">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" value="ff" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" value="imoe400@gmail.com" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number" class="form-label">Telefonnummer</label>
+                    <input type="text" id="phone_number" name="phone_number" class="form-control" value="984615"
+                           readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Passwort</label>
+                    <input type="password" id="password" name="password" class="form-control" value="XXXXXXX" readonly>
+                </div>
+                <div class="d-grid">
+                    <form th:action="@{/edit-profile}" class="d-grid" method="get">
+                        <button type="submit" class="btn btn-primary">Edit Profile</button>
+                    </form>
+                </div>
             </div>
         </div>
-        <!-- Edit Profile Form -->
-        <form th:action="@{/edit-profile}" th:method="get" class="edit-button-container">
-            <button class="edit-button" type="submit">Edit Profile</button>
-        </form>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
