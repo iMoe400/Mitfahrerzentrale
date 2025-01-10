@@ -25,7 +25,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests.requestMatchers("/**").permitAll()  // Registrierung und Login erlauben
-                .anyRequest().authenticated()).formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/home").permitAll()).logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll());
+                .anyRequest().authenticated())
+                .formLogin(form -> form.loginPage("/login")
+                        .defaultSuccessUrl("/home").permitAll())
+                .logout(logout -> logout.logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout").permitAll());
 
         return http.build();
     }

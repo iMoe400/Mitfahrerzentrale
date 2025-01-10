@@ -35,17 +35,22 @@ public class RideController {
     public String createRide(Authentication authentication, @RequestParam(value = "maxPassengers", required = false) String maxPassengers, @RequestParam(value = "departureLocation", required = false) String departureLocation, @RequestParam(value = "destinationLocation", required = false) String destinationLocation, @RequestParam(value = "departureTime", required = false) LocalDateTime departureTime, @RequestParam(value = "departureLat", required = false) String departureLat, @RequestParam(value = "departureLon", required = false) String departureLon, @RequestParam(value = "destinationLat", required = false) String destinationLat, @RequestParam(value = "destinationLon", required = false) String destinationLon, RedirectAttributes redirectAttributes) {
 
         if (departureLocation == null || destinationLocation == null || departureLat == null || departureLon == null || destinationLat == null || destinationLon == null || maxPassengers == null || departureTime == null) {
-            redirectAttributes.addFlashAttribute("error", "Alle Pflichtfelder müssen ausgefüllt sein.");
+            redirectAttributes.addFlashAttribute("error", "Alle Felder müssen ausgefüllt sein.");
             return "redirect:/home";
         }
 
         if (departureTime.isBefore(LocalDateTime.now())) {
-            redirectAttributes.addFlashAttribute("error", "Eine Fahrt in der Vergangenheit kann nicht erstellt werden.");
+            redirectAttributes.addFlashAttribute("error", "Zeitreisen ist NOOCH nicht möglich!");
             return "redirect:/home";
         }
 
-        if (maxPassengers.equals("0")) {
-            redirectAttributes.addFlashAttribute("error", "Maximale Passagierzahl muss größer als 0 sein.");
+        if (Double.parseDouble(maxPassengers) <= 0) {
+            redirectAttributes.addFlashAttribute("error", "Warum willst du eine Fahrt anbieten, wenn du doch niemanden Mitnimmst? ;)");
+            return "redirect:/home";
+        }
+
+        if(Double.parseDouble(maxPassengers) >8){
+            redirectAttributes.addFlashAttribute("error", "Maximale Passagierzahl darf maximal 8 sein.");
             return "redirect:/home";
         }
 
